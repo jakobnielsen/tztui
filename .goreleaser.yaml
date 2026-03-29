@@ -1,0 +1,60 @@
+version: 2
+
+project_name: tztui
+
+before:
+  hooks:
+    - go mod tidy
+    - go mod verify
+
+builds:
+  - id: tztui
+    main: ./cmd/tztui
+    binary: tztui
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: tztui
+    builds:
+      - tztui
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
+    files:
+      - README.md
+
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+  algorithm: sha256
+
+release:
+  github:
+    owner: jakobnielsen
+    name: tztui
+
+brews:
+  - name: tztui
+    ids:
+      - tztui
+    repository:
+      owner: jakobnielsen
+      name: homebrew-tztui
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    homepage: "https://github.com/jakobnielsen/tztui"
+    description: "A terminal UI for managing and browsing system timezones."
+    license: "MIT"
+    install: |
+      bin.install "tztui"
+    test: |
+      system "#{bin}/tztui", "--version"
