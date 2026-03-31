@@ -31,6 +31,12 @@ brew tap jakobnielsen/tztui
 brew install --cask tztui
 ```
 
+> **macOS Gatekeeper warning**: If macOS blocks the binary with "Apple could not verify 'tztui' is free of malware", run:
+> ```sh
+> xattr -d com.apple.quarantine $(which tztui)
+> ```
+> Alternatively, go to **System Settings → Privacy & Security** and click **Allow Anyway**.
+
 ### AUR (Arch Linux)
 
 ```sh
