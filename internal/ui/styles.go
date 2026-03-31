@@ -53,6 +53,7 @@ var (
 	StyleTableHeader = lipgloss.NewStyle().
 				Bold(true).
 				Foreground(colorAccent).
+				Padding(0, 1).
 				BorderStyle(lipgloss.NormalBorder()).
 				BorderBottom(true).
 				BorderForeground(colorMuted)

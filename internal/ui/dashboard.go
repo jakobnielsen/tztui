@@ -66,10 +66,11 @@ func (d *Dashboard) resizeCols() {
 		d.table.SetColumns(defaultDashCols())
 		return
 	}
-	// panel: 2 border + 2 padding = 4 overhead.
-	// fixed columns: star(2) + time(21) + offset(10) = 33.
-	// small inter-column slack: 4.
-	flex := max(20, d.width-4-33-4)
+	// Panel overhead: 2 border + 2 padding = 4. Panel content = d.width-4.
+	// Each of 5 table cells has Padding(0,1) = +2 chars each = 10 total overhead.
+	// Fixed col widths: star(2) + time(21) + offset(10) = 33.
+	// flex = (d.width-4) - 10 - 33 = d.width - 47
+	flex := max(20, d.width-47)
 	labelW := flex * 40 / 100
 	ianaW := flex - labelW
 	d.table.SetColumns([]table.Column{
@@ -155,7 +156,9 @@ func (d *Dashboard) Update(msg tea.Msg) (Dashboard, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		d.width = msg.Width
 		d.height = msg.Height
-		d.table.SetHeight(max(4, msg.Height-12))
+		// Overhead lines: header(2)+tabs(3)+panel borders(2)+title(2)+newline(1)
+		// +table header+border(2)+newline(1)+help(2) = 15. Use 16 for safety.
+		d.table.SetHeight(max(4, msg.Height-16))
 		d.resizeCols()
 	}
 
@@ -184,11 +187,7 @@ func (d *Dashboard) View() string {
 	legend := "● = current system timezone"
 	sb.WriteString("  " + StyleMuted.Render(legend))
 
-	panel := StylePanel
-	if d.width > 0 {
-		panel = panel.Width(d.width - 2)
-	}
-	return panel.Render(sb.String())
+	return StylePanel.Render(sb.String())
 }
 
 // tick returns a command that fires TickMsg after one second.

@@ -69,13 +69,13 @@ func (s *Search) applyFilter() {
 
 // resizeCols recalculates the label and IANA column widths for the search list.
 func (s *Search) resizeCols() {
-	// panel: 2 border + 2 padding = 4 overhead.
-	// per-row fixed: fav(2) + time(8) + gaps(~4) = 14.
-	flex := max(30, s.width-4-14)
+	// Panel overhead: 2 border + 2 padding = 4. Row fixed: fav(2) + time(8) = 10.
+	// Rows should fill exactly s.width-4 so the panel auto-sizes to s.width.
+	flex := max(30, s.width-4-10)
 	s.labelW = flex * 40 / 100
 	s.ianaW = flex - s.labelW
-	// input width: fill panel minus border+padding overhead.
-	s.input.Width = max(20, s.width-10)
+	// Input rendered width = input.Width + 4 (StyleInput border+padding).
+	s.input.Width = max(20, s.width-4-4)
 }
 
 func (s *Search) SelectedZone() *tz.Zone {
@@ -140,7 +140,9 @@ func (s *Search) Update(msg tea.Msg) (Search, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		s.width = msg.Width
 		s.height = msg.Height
-		s.visHeight = max(5, msg.Height-14)
+		// Overhead lines: header(2)+tabs(3)+panel borders(2)+title(2)+newline(1)
+		// +input(3)+newlines(2)+separator(1)+help(2) = 18. Use 20 for safety.
+		s.visHeight = max(5, msg.Height-20)
 		s.resizeCols()
 	}
 
@@ -213,7 +215,7 @@ func (s *Search) View() string {
 	if len(s.filtered) > s.visHeight {
 		sepW := 40
 		if s.width > 0 {
-			sepW = max(10, s.width-8)
+			sepW = max(10, s.width-4-10)
 		}
 		sb.WriteString(StyleMuted.Render(
 			strings.Repeat("─", sepW),
@@ -223,11 +225,7 @@ func (s *Search) View() string {
 
 	sb.WriteString(StyleHelp.Render("↑/↓ move  f toggle favourite  enter set system TZ  esc clear"))
 
-	panel := StylePanel
-	if s.width > 0 {
-		panel = panel.Width(s.width - 2)
-	}
-	return panel.Render(sb.String())
+	return StylePanel.Render(sb.String())
 }
 
 func padRight(s string, n int) string {

@@ -39,6 +39,7 @@ type App struct {
 	systemTZ  string
 	version   string
 	current   viewID
+	prevView  viewID
 	dashboard Dashboard
 	search    Search
 	picker    Picker
@@ -86,14 +87,15 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case SelectMsg:
 		if msg.IANA == "" {
-			// Picker cancelled / dismissed — go back to search.
+			// Picker cancelled — go back to where we came from.
 			if a.current == viewPicker {
-				a.current = viewSearch
-				a.search.Focus()
+				a.current = a.prevView
+				a.syncFocus()
 			}
 			return a, nil
 		}
-		// User selected a zone from Search — open Picker.
+		// Open Picker, remembering the originating view.
+		a.prevView = a.current
 		a.picker.Activate(msg.IANA)
 		a.current = viewPicker
 		a.search.Blur()
@@ -103,6 +105,11 @@ func (a App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.systemTZ = msg.IANA
 		a.dashboard.systemTZ = msg.IANA
 		a.dashboard.refreshRows()
+		// Dismiss the picker and return to the originating view.
+		if a.current == viewPicker {
+			a.current = a.prevView
+			a.syncFocus()
+		}
 		return a, nil
 
 	case tea.KeyMsg:
@@ -179,7 +186,7 @@ func (a App) renderHeader() string {
 	title := StyleHeader.Render("tztui")
 	sysTZ := fmt.Sprintf(" system: %s ", a.systemTZ)
 	badge := StyleCurrentTZBadge.Render(sysTZ)
-	ver := StyleMuted.Render("  v" + a.version)
+	ver := StyleMuted.Render("  v" + strings.TrimPrefix(a.version, "v"))
 
 	right := lipgloss.JoinHorizontal(lipgloss.Top, badge, ver)
 
