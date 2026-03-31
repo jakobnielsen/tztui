@@ -24,10 +24,11 @@ builds:
 
 archives:
   - id: tztui
-    builds:
+    ids:
       - tztui
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
-    format: tar.gz
+    formats:
+      - tar.gz
     files:
       - README.md
 
@@ -63,7 +64,7 @@ release:
     owner: jakobnielsen
     name: tztui
 
-brews:
+homebrew_casks:
   - name: tztui
     ids:
       - tztui
@@ -76,8 +77,5 @@ brews:
       email: bot@goreleaser.com
     homepage: "https://github.com/jakobnielsen/tztui"
     description: "A terminal UI for managing and browsing system timezones."
-    license: "MIT"
-    install: |
-      bin.install "tztui"
-    test: |
-      system "#{bin}/tztui", "--version"
+    binaries:
+      - tztui

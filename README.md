@@ -28,7 +28,7 @@ A terminal UI for browsing timezones and managing your system timezone, built wi
 
 ```sh
 brew tap jakobnielsen/tztui
-brew install tztui
+brew install --cask tztui
 ```
 
 ### AUR (Arch Linux)
@@ -70,10 +70,10 @@ favourites = ["Europe/London", "Asia/Tokyo", "America/New_York"]
 
 ## Changing the system timezone
 
-Requires elevated privileges:
+Changing the system timezone requires elevated privileges. `tztui` will attempt the change directly and, if permission is denied, prompt you for your sudo password inside the TUI — no need to run `sudo tztui`.
 
-- **Linux** — uses `timedatectl set-timezone`; run `tztui` with `sudo` or ensure your user is in the `wheel` group with `sudo` rights
-- **macOS** — uses `systemsetup -settimezone`; run `sudo tztui`
+- **Linux** — uses `timedatectl set-timezone`
+- **macOS** — uses `systemsetup -settimezone`
 
 ## Platform support
 
