@@ -44,19 +44,11 @@ BREAKING CHANGE: config keys have been renamed.
 
 ### `release-please.yml`
 
-Triggers on every push to `main`. Maintains a long-running pull request that:
+Triggers on every push to `main`. Runs three sequential jobs:
 
-- Updates `CHANGELOG.md` with grouped commit entries.
-- Bumps the version in `.release-please-manifest.json`.
-
-When the PR is merged, release-please creates the corresponding semver tag (`v1.2.3`).
-
-### `goreleaser.yml`
-
-Triggers when a `v*.*.*` tag is pushed. Runs two sequential jobs:
-
-1. **Test** — runs `go test ./...` on Ubuntu. The release job is blocked until this passes.
-2. **GoReleaser** — cross-compiles binaries for all platforms and publishes the GitHub release.
+1. **release-please** — Maintains a long-running PR that updates `CHANGELOG.md` and bumps the version. When the PR is merged it creates the semver tag and sets `release_created=true`.
+2. **test** — Runs `go test ./...`. Only runs when a release was just created.
+3. **goreleaser** — Cross-compiles binaries for all platforms and publishes the GitHub release. Only runs after tests pass.
 
 Release artefacts per version:
 
