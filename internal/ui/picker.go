@@ -37,6 +37,7 @@ type Picker struct {
 	setter     func(string) error
 	sudoSetter func(string, string) error
 	passInput  textinput.Model
+	width      int
 }
 
 func newPicker(setter func(string) error, sudoSetter func(string, string) error) Picker {
@@ -110,6 +111,11 @@ func (p *Picker) Update(msg tea.Msg) (Picker, tea.Cmd) {
 		return *p, cmd
 	}
 
+	// Track terminal size.
+	if ws, ok := msg.(tea.WindowSizeMsg); ok {
+		p.width = ws.Width
+	}
+
 	return *p, nil
 }
 
@@ -179,5 +185,9 @@ func (p *Picker) View() string {
 		body.WriteString(StyleHelp.Render("Press any key to go back."))
 	}
 
-	return StyleConfirmBox.Render(body.String())
+	boxW := 50
+	if p.width > 0 {
+		boxW = max(44, min(70, p.width-10))
+	}
+	return StyleConfirmBox.Width(boxW).Render(body.String())
 }

@@ -27,6 +27,8 @@ type Search struct {
 	width     int
 	height    int
 	visHeight int
+	labelW    int
+	ianaW     int
 }
 
 func newSearch(cfg *config.Config) Search {
@@ -63,6 +65,17 @@ func (s *Search) applyFilter() {
 	if s.cursor >= len(s.filtered) {
 		s.cursor = max(0, len(s.filtered)-1)
 	}
+}
+
+// resizeCols recalculates the label and IANA column widths for the search list.
+func (s *Search) resizeCols() {
+	// panel: 2 border + 2 padding = 4 overhead.
+	// per-row fixed: fav(2) + time(8) + gaps(~4) = 14.
+	flex := max(30, s.width-4-14)
+	s.labelW = flex * 40 / 100
+	s.ianaW = flex - s.labelW
+	// input width: fill panel minus border+padding overhead.
+	s.input.Width = max(20, s.width-10)
 }
 
 func (s *Search) SelectedZone() *tz.Zone {
@@ -128,6 +141,7 @@ func (s *Search) Update(msg tea.Msg) (Search, tea.Cmd) {
 		s.width = msg.Width
 		s.height = msg.Height
 		s.visHeight = max(5, msg.Height-14)
+		s.resizeCols()
 	}
 
 	var cmd tea.Cmd
@@ -164,6 +178,15 @@ func (s *Search) View() string {
 		}
 	}
 
+	labelW := 22
+	ianaW := 30
+	if s.labelW > 0 {
+		labelW = s.labelW
+	}
+	if s.ianaW > 0 {
+		ianaW = s.ianaW
+	}
+
 	for i := start; i < end; i++ {
 		z := s.filtered[i]
 		fav := "  "
@@ -175,8 +198,8 @@ func (s *Search) View() string {
 
 		line := lipgloss.JoinHorizontal(lipgloss.Top,
 			fav,
-			padRight(z.Label, 22),
-			StyleMuted.Render(padRight(z.IANA, 30)),
+			padRight(z.Label, labelW),
+			StyleMuted.Render(padRight(z.IANA, ianaW)),
 			StyleClock.Render(timeStr),
 		)
 
@@ -188,15 +211,23 @@ func (s *Search) View() string {
 	}
 
 	if len(s.filtered) > s.visHeight {
+		sepW := 40
+		if s.width > 0 {
+			sepW = max(10, s.width-8)
+		}
 		sb.WriteString(StyleMuted.Render(
-			strings.Repeat("─", 40),
+			strings.Repeat("─", sepW),
 		))
 		sb.WriteString("\n")
 	}
 
 	sb.WriteString(StyleHelp.Render("↑/↓ move  f toggle favourite  enter set system TZ  esc clear"))
 
-	return StylePanel.Render(sb.String())
+	panel := StylePanel
+	if s.width > 0 {
+		panel = panel.Width(s.width - 2)
+	}
+	return panel.Render(sb.String())
 }
 
 func padRight(s string, n int) string {

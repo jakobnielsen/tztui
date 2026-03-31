@@ -27,13 +27,8 @@ type Dashboard struct {
 }
 
 func newDashboard(cfg *config.Config, systemTZ string) Dashboard {
-	cols := []table.Column{
-		{Title: "★", Width: 2},
-		{Title: "Label", Width: 20},
-		{Title: "IANA", Width: 28},
-		{Title: "Local time", Width: 25},
-		{Title: "Offset", Width: 10},
-	}
+	// Default column widths used before the first WindowSizeMsg arrives.
+	cols := defaultDashCols()
 
 	t := table.New(
 		table.WithColumns(cols),
@@ -53,6 +48,37 @@ func newDashboard(cfg *config.Config, systemTZ string) Dashboard {
 	}
 	d.refreshRows()
 	return d
+}
+
+func defaultDashCols() []table.Column {
+	return []table.Column{
+		{Title: "★", Width: 2},
+		{Title: "Label", Width: 20},
+		{Title: "IANA", Width: 28},
+		{Title: "Local time", Width: 21},
+		{Title: "Offset", Width: 10},
+	}
+}
+
+// resizeCols distributes available terminal width across the flexible table columns.
+func (d *Dashboard) resizeCols() {
+	if d.width == 0 {
+		d.table.SetColumns(defaultDashCols())
+		return
+	}
+	// panel: 2 border + 2 padding = 4 overhead.
+	// fixed columns: star(2) + time(21) + offset(10) = 33.
+	// small inter-column slack: 4.
+	flex := max(20, d.width-4-33-4)
+	labelW := flex * 40 / 100
+	ianaW := flex - labelW
+	d.table.SetColumns([]table.Column{
+		{Title: "★", Width: 2},
+		{Title: "Label", Width: labelW},
+		{Title: "IANA", Width: ianaW},
+		{Title: "Local time", Width: 21},
+		{Title: "Offset", Width: 10},
+	})
 }
 
 func (d *Dashboard) refreshRows() {
@@ -130,6 +156,7 @@ func (d *Dashboard) Update(msg tea.Msg) (Dashboard, tea.Cmd) {
 		d.width = msg.Width
 		d.height = msg.Height
 		d.table.SetHeight(max(4, msg.Height-12))
+		d.resizeCols()
 	}
 
 	var cmd tea.Cmd
@@ -157,7 +184,11 @@ func (d *Dashboard) View() string {
 	legend := "● = current system timezone"
 	sb.WriteString("  " + StyleMuted.Render(legend))
 
-	return StylePanel.Render(sb.String())
+	panel := StylePanel
+	if d.width > 0 {
+		panel = panel.Width(d.width - 2)
+	}
+	return panel.Render(sb.String())
 }
 
 // tick returns a command that fires TickMsg after one second.
