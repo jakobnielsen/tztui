@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/jakobnielsen/tztui/compare/v1.2.0...v1.3.0) (2026-03-31)
+
+
+### Features
+
+* enable Homebrew tap publishing ([ed17ecd](https://github.com/jakobnielsen/tztui/commit/ed17ecd75aeaf6da4363554058b4caf5789ead21))
+
 ## [1.2.0](https://github.com/jakobnielsen/tztui/compare/v1.1.0...v1.2.0) (2026-03-31)
 
 
