@@ -63,21 +63,22 @@ release:
     owner: jakobnielsen
     name: tztui
 
-brews:
-  - name: tztui
-    ids:
-      - tztui
-    repository:
-      owner: jakobnielsen
-      name: homebrew-tztui
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    commit_author:
-      name: goreleaserbot
-      email: bot@goreleaser.com
-    homepage: "https://github.com/jakobnielsen/tztui"
-    description: "A terminal UI for managing and browsing system timezones."
-    license: "MIT"
-    install: |
-      bin.install "tztui"
-    test: |
-      system "#{bin}/tztui", "--version"
+# Homebrew tap publishing — uncomment and add HOMEBREW_TAP_GITHUB_TOKEN secret to enable.
+# brews:
+#   - name: tztui
+#     ids:
+#       - tztui
+#     repository:
+#       owner: jakobnielsen
+#       name: homebrew-tztui
+#       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+#     commit_author:
+#       name: goreleaserbot
+#       email: bot@goreleaser.com
+#     homepage: "https://github.com/jakobnielsen/tztui"
+#     description: "A terminal UI for managing and browsing system timezones."
+#     license: "MIT"
+#     install: |
+#       bin.install "tztui"
+#     test: |
+#       system "#{bin}/tztui", "--version"
