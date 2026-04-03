@@ -40,7 +40,7 @@ brew install --cask tztui
 ### AUR (Arch Linux)
 
 ```sh
-yay -S tztui
+yay -S tztui-bin
 ```
 
 ### go install

@@ -62,3 +62,38 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+  publish-aur:
+    name: Publish to AUR
+    needs: [release-please, goreleaser]
+    if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download release checksums
+        run: |
+          curl -sL \
+            "https://github.com/jakobnielsen/tztui/releases/download/${{ needs.release-please.outputs.tag_name }}/tztui_checksums.txt" \
+            -o checksums.txt
+
+      - name: Update PKGBUILD
+        run: |
+          VERSION="${{ needs.release-please.outputs.tag_name }}"
+          VERSION="${VERSION#v}"
+          SHA_X86=$(grep "tztui_linux_amd64.tar.gz" checksums.txt | awk '{print $1}')
+          SHA_AARCH64=$(grep "tztui_linux_arm64.tar.gz" checksums.txt | awk '{print $1}')
+          sed -i "s/^pkgver=.*/pkgver=${VERSION}/" PKGBUILD
+          sed -i "s/^sha256sums_x86_64=.*/sha256sums_x86_64=('${SHA_X86}')/" PKGBUILD
+          sed -i "s/^sha256sums_aarch64=.*/sha256sums_aarch64=('${SHA_AARCH64}')/" PKGBUILD
+
+      - name: Publish to AUR
+        uses: KSXGitHub/github-actions-deploy-aur@v3
+        with:
+          pkgname: tztui-bin
+          pkgbuild: ./PKGBUILD
+          commit_username: Jakob Nielsen
+          commit_email: ${{ secrets.AUR_EMAIL }}
+          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          commit_message: "Update to ${{ needs.release-please.outputs.tag_name }}"
+          allow_empty_commits: false

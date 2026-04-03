@@ -22,6 +22,9 @@ go.work.sum
 # Build cache
 dist/
 
+# AUR packaging (only belongs in the AUR git repo, not here)
+.SRCINFO
+
 # macOS metadata
 .DS_Store
 
