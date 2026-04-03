@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/jakobnielsen/tztui/compare/v1.4.2...v1.4.3) (2026-04-03)
+
+
+### Bug Fixes
+
+* update SSH configuration for AUR publishing to ensure proper key usage ([d359699](https://github.com/jakobnielsen/tztui/commit/d359699ad2a1ed6108b07276b9cc83cd841b4680))
+
 ## [1.4.2](https://github.com/jakobnielsen/tztui/compare/v1.4.1...v1.4.2) (2026-04-03)
 
 
