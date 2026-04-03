@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/jakobnielsen/tztui/compare/v1.4.0...v1.4.1) (2026-04-03)
+
+
+### Bug Fixes
+
+* update AUR deployment action version to v2.7.2 ([05e64d3](https://github.com/jakobnielsen/tztui/commit/05e64d3d21c0e6458cc6a250d8d2b854698e81db))
+
 ## [1.4.0](https://github.com/jakobnielsen/tztui/compare/v1.3.1...v1.4.0) (2026-04-03)
 
 
