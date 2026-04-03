@@ -77,7 +77,7 @@ jobs:
             "https://github.com/jakobnielsen/tztui/releases/download/${{ needs.release-please.outputs.tag_name }}/tztui_checksums.txt" \
             -o checksums.txt
 
-      - name: Update PKGBUILD
+      - name: Update PKGBUILD and generate .SRCINFO
         run: |
           VERSION="${{ needs.release-please.outputs.tag_name }}"
           VERSION="${VERSION#v}"
@@ -86,14 +86,29 @@ jobs:
           sed -i "s/^pkgver=.*/pkgver=${VERSION}/" PKGBUILD
           sed -i "s/^sha256sums_x86_64=.*/sha256sums_x86_64=('${SHA_X86}')/" PKGBUILD
           sed -i "s/^sha256sums_aarch64=.*/sha256sums_aarch64=('${SHA_AARCH64}')/" PKGBUILD
+          bash scripts/generate-srcinfo.sh "${VERSION}" "${SHA_X86}" "${SHA_AARCH64}"
 
-      - name: Publish to AUR
-        uses: KSXGitHub/github-actions-deploy-aur@v2.7.2
-        with:
-          pkgname: tztui-bin
-          pkgbuild: ./PKGBUILD
-          commit_username: Jakob Nielsen
-          commit_email: ${{ secrets.AUR_EMAIL }}
-          ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
-          commit_message: "Update to ${{ needs.release-please.outputs.tag_name }}"
-          allow_empty_commits: false
+      - name: Set up SSH for AUR
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.AUR_SSH_PRIVATE_KEY }}" > ~/.ssh/aur_key
+          chmod 600 ~/.ssh/aur_key
+          ssh-keyscan -t rsa,ecdsa,ed25519 aur.archlinux.org >> ~/.ssh/known_hosts
+          printf 'Host aur.archlinux.org\n  IdentityFile ~/.ssh/aur_key\n  User aur\n' >> ~/.ssh/config
+
+      - name: Push to AUR
+        run: |
+          git clone ssh://aur@aur.archlinux.org/tztui-bin.git aur-repo
+          cp PKGBUILD aur-repo/PKGBUILD
+          cp .SRCINFO aur-repo/.SRCINFO
+          cd aur-repo
+          git config user.name "Jakob Nielsen"
+          git config user.email "${{ secrets.AUR_EMAIL }}"
+          git add PKGBUILD .SRCINFO
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Update to ${{ needs.release-please.outputs.tag_name }}"
+          git push
