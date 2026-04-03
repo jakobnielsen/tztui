@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.2](https://github.com/jakobnielsen/tztui/compare/v1.4.1...v1.4.2) (2026-04-03)
+
+
+### Bug Fixes
+
+* update AUR publishing workflow to include .SRCINFO generation ([96006d3](https://github.com/jakobnielsen/tztui/commit/96006d3222a7527d434f5ad43a61cae9b3f28eb3))
+
 ## [1.4.1](https://github.com/jakobnielsen/tztui/compare/v1.4.0...v1.4.1) (2026-04-03)
 
 
