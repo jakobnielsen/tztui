@@ -92,10 +92,10 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo "${{ secrets.AUR_SSH_PRIVATE_KEY }}" > ~/.ssh/aur_key
+          printf '%s\n' "${{ secrets.AUR_SSH_PRIVATE_KEY }}" > ~/.ssh/aur_key
           chmod 600 ~/.ssh/aur_key
           ssh-keyscan -t rsa,ecdsa,ed25519 aur.archlinux.org >> ~/.ssh/known_hosts
-          printf 'Host aur.archlinux.org\n  IdentityFile ~/.ssh/aur_key\n  User aur\n' >> ~/.ssh/config
+          printf 'Host aur.archlinux.org\n  IdentityFile ~/.ssh/aur_key\n  IdentitiesOnly yes\n  User aur\n' >> ~/.ssh/config
 
       - name: Push to AUR
         run: |
