@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/jakobnielsen/tztui/compare/v1.3.1...v1.4.0) (2026-04-03)
+
+
+### Features
+
+* add AUR publishing workflow and update packaging details ([1c396fc](https://github.com/jakobnielsen/tztui/commit/1c396fc257b733e3a3e1197252ac04aae0d75a16))
+
 ## [1.3.1](https://github.com/jakobnielsen/tztui/compare/v1.3.0...v1.3.1) (2026-03-31)
 
 
