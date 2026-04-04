@@ -66,6 +66,7 @@ nfpms:
       - tztui
     package_name: tztui
     vendor: Jakob Nielsen
+    maintainer: Jakob Nielsen <nielsenjakob@gmail.com>
     homepage: https://github.com/jakobnielsen/tztui
     description: A terminal UI for managing and browsing system timezones.
     license: MIT
