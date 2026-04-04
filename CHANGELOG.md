@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/jakobnielsen/tztui/compare/v1.4.3...v1.5.0) (2026-04-04)
+
+
+### Features
+
+* refactor help text rendering for improved readability ([87a4d5d](https://github.com/jakobnielsen/tztui/commit/87a4d5d947a77e24249e897820261c73b8b4f28c))
+* update timezone data and improve zone listing functionality ([215e576](https://github.com/jakobnielsen/tztui/commit/215e5760710f2113e55201ba0e874062614e1aa6))
+
 ## [1.4.3](https://github.com/jakobnielsen/tztui/compare/v1.4.2...v1.4.3) (2026-04-03)
 
 
