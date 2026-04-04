@@ -182,10 +182,7 @@ func (d *Dashboard) View() string {
 	sb.WriteString("\n")
 	sb.WriteString(d.table.View())
 	sb.WriteString("\n")
-	sb.WriteString(StyleHelp.Render("↑/↓ move  enter set timezone  f remove  / search  tab next view"))
-
-	legend := "● = current system timezone"
-	sb.WriteString("  " + StyleMuted.Render(legend))
+	sb.WriteString(renderHelp("↑/↓", "move", "enter", "set timezone", "f", "remove", "/", "search", "tab", "next view", "●", "current system timezone"))
 
 	return StylePanel.Render(sb.String())
 }

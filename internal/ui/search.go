@@ -223,7 +223,7 @@ func (s *Search) View() string {
 		sb.WriteString("\n")
 	}
 
-	sb.WriteString(StyleHelp.Render("↑/↓ move  f toggle favourite  enter set system TZ  esc clear"))
+	sb.WriteString(renderHelp("↑/↓", "move", "f", "toggle favourite", "enter", "set system TZ", "esc", "clear"))
 
 	return StylePanel.Render(sb.String())
 }

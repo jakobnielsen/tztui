@@ -1,6 +1,10 @@
 package ui
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"strings"
+
+	"github.com/charmbracelet/lipgloss"
+)
 
 var (
 	colorPrimary   = lipgloss.Color("#7C3AED")
@@ -104,4 +108,23 @@ var (
 				Background(colorAccent).
 				Bold(true).
 				Padding(0, 1)
+
+	styleHelpKey = lipgloss.NewStyle().
+			Foreground(colorAccent).
+			Bold(true)
 )
+
+// renderHelp formats a help string where keys and descriptions alternate,
+// separated by spaces. Keys are rendered in accent colour, descriptions in dim.
+// Pass pairs of (key, description), e.g. renderHelp("↑/↓","move", "f","favourite").
+func renderHelp(pairs ...string) string {
+	parts := make([]string, 0, len(pairs))
+	for i, s := range pairs {
+		if i%2 == 0 {
+			parts = append(parts, styleHelpKey.Render(s))
+		} else {
+			parts = append(parts, StyleMuted.Render(s))
+		}
+	}
+	return StyleHelp.Render(strings.Join(parts, " "))
+}

@@ -170,19 +170,19 @@ func (p *Picker) View() string {
 		body.WriteString("\n")
 		body.WriteString(StyleInput.Render(p.passInput.View()))
 		body.WriteString("\n\n")
-		body.WriteString(StyleHelp.Render("enter confirm  esc cancel"))
+		body.WriteString(renderHelp("enter", "confirm", "esc", "cancel"))
 
 	case pickerDone:
 		body.WriteString(StyleSuccess.Render("â " + p.message))
 		body.WriteString("\n\n")
-		body.WriteString(StyleHelp.Render("Press any key to continue."))
+		body.WriteString(renderHelp("any key", "continue"))
 
 	case pickerError:
 		body.WriteString(StyleError.Render("â Failed to change timezone"))
 		body.WriteString("\n\n")
 		body.WriteString(p.message)
 		body.WriteString("\n\n")
-		body.WriteString(StyleHelp.Render("Press any key to go back."))
+		body.WriteString(renderHelp("any key", "go back"))
 	}
 
 	boxW := 50
