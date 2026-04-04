@@ -5,7 +5,7 @@ A terminal UI for browsing timezones and managing your system timezone, built wi
 ## Features
 
 - **Dashboard** — shows your favourite timezones with a live clock
-- **Search/Browse** — fuzzy-filter all ~120 curated IANA zones; toggle favourites with `f`
+- **Search/Browse** — fuzzy-filter all 500+ IANA zones; toggle favourites with `f`
 - **Set Timezone** — confirm and apply a new system timezone (requires root / sudo)
 - Self-contained binary — embeds the IANA timezone database via `time/tzdata`
 

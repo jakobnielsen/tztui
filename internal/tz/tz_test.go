@@ -44,7 +44,7 @@ func TestListZones_NonEmpty(t *testing.T) {
 }
 
 func TestAllZonesParseable(t *testing.T) {
-	for _, z := range Zones {
+	for _, z := range ListZones() {
 		t.Run(z.IANA, func(t *testing.T) {
 			_, err := time.LoadLocation(z.IANA)
 			if err != nil {
@@ -58,7 +58,10 @@ func TestLabelForIANA(t *testing.T) {
 	if got := LabelForIANA("Europe/London"); got != "London" {
 		t.Errorf("got %q, want %q", got, "London")
 	}
-	if got := LabelForIANA("Unknown/Zone"); got != "Unknown/Zone" {
-		t.Errorf("fallback: got %q, want %q", got, "Unknown/Zone")
+	if got := LabelForIANA("America/New_York"); got != "New York" {
+		t.Errorf("got %q, want %q", got, "New York")
+	}
+	if got := LabelForIANA("UTC"); got != "UTC" {
+		t.Errorf("got %q, want %q", got, "UTC")
 	}
 }
