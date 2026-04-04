@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/jakobnielsen/tztui/compare/v1.5.0...v1.6.0) (2026-04-04)
+
+
+### Features
+
+* add nfpms configuration and enhance installation instructions for Debian, Fedora, and openSUSE ([e156529](https://github.com/jakobnielsen/tztui/commit/e15652974e563a83fa6ef67aca26fe31b11547a6))
+
 ## [1.5.0](https://github.com/jakobnielsen/tztui/compare/v1.4.3...v1.5.0) (2026-04-04)
 
 
