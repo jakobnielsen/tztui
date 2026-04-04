@@ -24,6 +24,36 @@ A terminal UI for browsing timezones and managing your system timezone, built wi
 
 ## Installation
 
+### AUR (Arch Linux)
+
+```sh
+yay -S tztui-bin
+```
+
+### Debian / Ubuntu
+
+Download the `.deb` from the [latest release](https://github.com/jakobnielsen/tztui/releases/latest) and install it:
+
+```sh
+sudo dpkg -i tztui_linux_amd64.deb
+```
+
+Replace `amd64` with `arm64` if you are on an ARM machine.
+
+### Fedora / RHEL / openSUSE
+
+Download the `.rpm` from the [latest release](https://github.com/jakobnielsen/tztui/releases/latest) and install it:
+
+```sh
+# Fedora / RHEL
+sudo rpm -i tztui_linux_amd64.rpm
+
+# openSUSE
+sudo zypper install tztui_linux_amd64.rpm
+```
+
+Replace `amd64` with `arm64` if you are on an ARM machine.
+
 ### Homebrew (macOS + Linux)
 
 ```sh
@@ -36,12 +66,6 @@ brew install --cask tztui
 > xattr -d com.apple.quarantine $(which tztui)
 > ```
 > Alternatively, go to **System Settings → Privacy & Security** and click **Allow Anyway**.
-
-### AUR (Arch Linux)
-
-```sh
-yay -S tztui-bin
-```
 
 ### go install
 

@@ -31,6 +31,7 @@ archives:
       - tar.gz
     files:
       - README.md
+      - LICENSE
 
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
@@ -58,6 +59,24 @@ changelog:
       - "^refactor:"
       - "Merge pull request"
       - "Merge branch"
+
+nfpms:
+  - id: tztui
+    ids:
+      - tztui
+    package_name: tztui
+    vendor: Jakob Nielsen
+    homepage: https://github.com/jakobnielsen/tztui
+    description: A terminal UI for managing and browsing system timezones.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    contents:
+      - src: README.md
+        dst: /usr/share/doc/tztui/README.md
+      - src: LICENSE
+        dst: /usr/share/doc/tztui/LICENSE
 
 release:
   github:
